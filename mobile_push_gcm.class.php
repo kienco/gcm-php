@@ -44,7 +44,6 @@
 		            //throw new Mobile_Push_Exception('The api key must be a string and not empty');
 		        }
 		        $this->_apiKey = $key;
-		        //return $this;
 	     }
 
 	     /**
