@@ -35,7 +35,7 @@
 	     * Set API Key
 	     *
 	     * @param  string $key
-	     * @return Zend_Mobile_Push_Gcm
+	     * @return string
 	     * @throws Mobile_Push_Gcm_Exception
 	     */
 	     public function setApiKey($key){
