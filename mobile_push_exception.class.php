@@ -78,4 +78,4 @@
 	} 
 
 /* End of file mobile_push_exception.class.php */
-/* Location: ./www/ */
+/* Location: ./www/gcm */
