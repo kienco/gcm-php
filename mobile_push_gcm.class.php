@@ -36,7 +36,7 @@
 	     *
 	     * @param  string $key
 	     * @return Zend_Mobile_Push_Gcm
-	     * @throws Zend_Mobile_Push_Exception
+	     * @throws Mobile_Push_Gcm_Exception
 	     */
 	     public function setApiKey($key){
 		        if (!is_string($key) || empty($key)) {
@@ -70,7 +70,7 @@
 	     *
 	     * @param $message
 	     * @return Json array contain detail information that GCM server return
-	     * @throws Mobile_Push_Exception
+	     * @throws Mobile_Push_Gcm_Exception
 	     */
 	    public function send($message){
 	        
