@@ -40,8 +40,7 @@
 	     */
 	     public function setApiKey($key){
 		        if (!is_string($key) || empty($key)) {
-		        echo 'The api key must be a string and not empty';
-		            //throw new Mobile_Push_Exception('The api key must be a string and not empty');
+		            throw new Mobile_Push_Gcm_Exception ('The api key must be a string and not empty');
 		        }
 		        $this->_apiKey = $key;
 	     }
