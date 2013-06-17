@@ -6,76 +6,121 @@
 		Document Refer : Zend Framework
 		Blog: http://www.nvkien.wordpress.com
 	*/
-		
-	class Mobile_Push_Gcm_Exception extends Exception{
+	require_once('mobile_push_exception.class.php');	
+	
+	class Mobile_Push_Gcm {
 
-	     /**
-	     * @var null|Exception
+		/**
+	     * @const string Server URI
 	     */
-	    private $_previous = null;
+    	const SERVER_URI = 'https://android.googleapis.com/gcm/send';
+
+    	/**
+	     * API Key
+	     *
+	     * @var string
+	    */
+	    private $_apiKey;
 
 	    /**
-	     * Construct the exception
-	     *
-	     * @param  string $msg
-	     * @param  int $code
-	     * @param  Exception $previous
-	     * @return void
-	     */
-	    public function __construct($msg = '', $code = 0, Exception $previous = null)
-	    {
-	        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-	            parent::__construct($msg, (int) $code);
-	            $this->_previous = $previous;
-	        } else {
-	            parent::__construct($msg, (int) $code, $previous);
-	        }
-	    }
-
-	    /**
-	     * Overloading
-	     *
-	     * For PHP < 5.3.0, provides access to the getPrevious() method.
-	     *
-	     * @param  string $method
-	     * @param  array $args
-	     * @return mixed
-	     */
-	    public function __call($method, array $args)
-	    {
-	        if ('getprevious' == strtolower($method)) {
-	            return $this->_getPrevious();
-	        }
-	        return null;
-	    }
-
-	    /**
-	     * String representation of the exception
+	     * Get API Key
 	     *
 	     * @return string
-	     */
-	    public function __toString()
-	    {
-	        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-	            if (null !== ($e = $this->getPrevious())) {
-	                return $e->__toString()
-	                       . "\n\nNext "
-	                       . parent::__toString();
-	            }
-	        }
-	        return parent::__toString();
+	    */
+	    public function getApiKey(){
+	        return $this->_apiKey;
 	    }
 
 	    /**
-	     * Returns previous Exception
+	     * Set API Key
 	     *
-	     * @return Exception|null
+	     * @param  string $key
+	     * @return Zend_Mobile_Push_Gcm
+	     * @throws Zend_Mobile_Push_Exception
 	     */
-	    protected function _getPrevious()
-	    {
-	        return $this->_previous;
-	    }
+		 public function setApiKey($key){
+		        if (!is_string($key) || empty($key)) {
+		        echo 'The api key must be a string and not empty';
+		            //throw new Mobile_Push_Exception('The api key must be a string and not empty');
+		        }
+		        $this->_apiKey = $key;
+		        //return $this;
+		 }
+
+		/**
+	     * List of devices Id 
+	     *
+	     * @var string
+	    */
+		private $devices = array();
+
+		/**
+	     * Set list of devices Id 
+	     *
+	     * @param  string $key
+	     */
+		public function setDevices($deviceIds){
+			if(is_array($deviceIds)){
+				$this->devices = $deviceIds;
+			} else {
+				$this->devices = array($deviceIds);
+			}
+		}
+
+		 /**
+	     * Send Message
+	     *
+	     * @param $message
+	     * @return Json array contain detail information that GCM server return
+	     * @throws Mobile_Push_Exception
+	     */
+	    public function send($message){
+	        
+	    	if(!is_array($this->devices) || count($this->devices) == 0){
+	    		throw new Mobile_Push_Gcm_Exception ('No devices set');
+			}
+
+			if(strlen($this->_apiKey) < 8){
+				throw new Mobile_Push_Gcm_Exception ('Server API Key not set');
+			}
+
+			$fields = array(
+				'registration_ids'  => $this->devices,
+				'data'              => $message ,
+			);
+
+			$headers = array( 
+				'Authorization: key=' . $this->getApiKey(),
+				'Content-Type: application/json'
+			);
+
+			// Open connection
+			$ch = curl_init();
+			
+			// Set the url, number of POST vars, POST data
+		        curl_setopt($ch, CURLOPT_URL,  self::SERVER_URI);
+		 
+		        curl_setopt($ch, CURLOPT_POST, true);
+		        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		 
+		        // Disabling SSL Certificate support temporarly
+		        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		 
+		        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+        
+
+			// Execute post
+			$result = curl_exec($ch);
+
+			// Close connection
+			curl_close($ch);
+
+			return $result;
+		}
+
 	} 
 
-/* End of file mobile_push_exception.class.php */
+		
+/* End of file mobile_push_gcm.class.php */
 /* Location: ./www/ */
