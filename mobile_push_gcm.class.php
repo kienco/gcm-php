@@ -9,7 +9,7 @@
 		
 	class Mobile_Push_Gcm_Exception extends Exception{
 
-		 /**
+	     /**
 	     * @var null|Exception
 	     */
 	    private $_previous = null;
