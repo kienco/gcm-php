@@ -10,12 +10,12 @@
 	
 	class Mobile_Push_Gcm {
 
-		/**
+	     /**
 	     * @const string Server URI
 	     */
-    	const SERVER_URI = 'https://android.googleapis.com/gcm/send';
+    	    const SERVER_URI = 'https://android.googleapis.com/gcm/send';
 
-    	/**
+    	    /**
 	     * API Key
 	     *
 	     * @var string
@@ -38,23 +38,23 @@
 	     * @return Zend_Mobile_Push_Gcm
 	     * @throws Zend_Mobile_Push_Exception
 	     */
-		 public function setApiKey($key){
+	     public function setApiKey($key){
 		        if (!is_string($key) || empty($key)) {
 		        echo 'The api key must be a string and not empty';
 		            //throw new Mobile_Push_Exception('The api key must be a string and not empty');
 		        }
 		        $this->_apiKey = $key;
 		        //return $this;
-		 }
+	     }
 
-		/**
+	     /**
 	     * List of devices Id 
 	     *
 	     * @var string
 	    */
 		private $devices = array();
 
-		/**
+	     /**
 	     * Set list of devices Id 
 	     *
 	     * @param  string $key
@@ -67,7 +67,7 @@
 			}
 		}
 
-		 /**
+	     /**
 	     * Send Message
 	     *
 	     * @param $message
